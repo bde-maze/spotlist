@@ -89,7 +89,7 @@ if (searchParams.get('code')) {
     scope: scopes
   })}`
   window.location = url
-} else if (localStorage.setAt && localStorage.setAt + 3600000 <= Date.now()) {
+} else if (Number(localStorage.setAt) + 3600000 <= Date.now()) {
   console.log('Token expired')
   fetch(
     `/api/spotify?refresh_token=${
