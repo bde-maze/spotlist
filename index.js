@@ -1,5 +1,15 @@
 console.log('index.js')
 
+const displayUserInformations = () => {
+  console.log(localStorage.display_name, localStorage.avatarUrl)
+
+  const displayNameElement = document.getElementById('display-name')
+  displayNameElement.textContent = localStorage.display_name
+
+  const avatar = document.getElementById('avatar')
+  avatar.style.backgroundImage = `url(${localStorage.avatarUrl})`
+}
+
 const compare = (a, b) => {
   if (a.nbTracks < b.nbTracks) return -1
   if (a.nbTracks > b.nbTracks) return 1
@@ -121,6 +131,8 @@ if (searchParams.get('code')) {
 } else {
   // We Fetch the playlists
   console.log('Fetch playlists')
+
+  displayUserInformations()
 
   fetch(`/api/spotify/playlists?access_token=${token}`)
     .then(response => {
