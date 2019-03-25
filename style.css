@@ -17,7 +17,7 @@ body {
 .right,
 .left {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   color: #505050;
 }
 
@@ -29,6 +29,11 @@ body {
   align-self: center;
 }
 
+.profile-informations {
+  display: flex;
+  flex-direction: row;
+}
+
 .subtitle {
   font-size: 18px;
   font-weight: 300;
@@ -37,23 +42,109 @@ body {
 }
 
 #avatar {
+  position: absolute;
+  top: -20px;
+  right: -15px;
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  border: solid 3px white;
+  border: solid 5px #f7f7f7;
   background-position: center;
   background-size: 100%;
   background-repeat: no-repeat;
-  box-shadow: 7px 7px 10px #d7d7d766;
   align-self: center;
+  background-color: #c9e3ac;
+}
+
+#player {
+  padding: 15px;
+  position: relative;
+  background-color: #f7f7f7;
+  width: 350px;
+  height: 150px;
+  border-radius: 15px;
+  box-shadow: 7px 7px 10px #d7d7d766;
+}
+
+#device {
+  font-size: 16px;
+}
+
+#play-pause {
+  cursor: pointer;
+  position: absolute;
+  bottom: -35px;
+  right: 150px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  border: solid 5px #f7f7f7;
+  background-position: center;
+  background-size: 65%;
+  background-repeat: no-repeat;
+  align-self: center;
+  background-color: #17a348;
+}
+
+#play-pause.paused {
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' color='rgb(247, 247, 247)' width='36' height='36' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>play-solid</title><path class='clr-i-solid clr-i-solid-path-1' d='M32.16,16.08,8.94,4.47A2.07,2.07,0,0,0,6,6.32V29.53a2.06,2.06,0,0,0,3,1.85L32.16,19.77a2.07,2.07,0,0,0,0-3.7Z'></path><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+}
+
+#play-pause.playing {
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' color='rgb(247, 247, 247)' fill='currentColor' width='36' height='36'  viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>pause-solid</title><rect class='clr-i-solid clr-i-solid-path-1' x='3.95' y='4' width='11' height='28' rx='2.07' ry='2.07'></rect><rect class='clr-i-solid clr-i-solid-path-2' x='20.95' y='4' width='11' height='28' rx='2.07' ry='2.07'></rect><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+}
+
+#prev {
+  cursor: pointer;
+  position: absolute;
+  bottom: -20px;
+  left: 110px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: solid 5px #f7f7f7;
+  background-position: center;
+  background-size: 50%;
+  background-repeat: no-repeat;
+  align-self: center;
+  background-color: #17a348;
+  transform: rotate(180deg);
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' width='36' height='36' color='rgb(247, 247, 247)' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>step-forward-solid</title><path class='clr-i-solid clr-i-solid-path-1' d='M5,31.9a2,2,0,0,1-2-2V5.44A2,2,0,0,1,6.12,3.81L23.18,16a2,2,0,0,1,0,3.25h0L6.12,31.52A2,2,0,0,1,5,31.9Z'></path><rect class='clr-i-solid clr-i-solid-path-2' x='25.95' y='3.67' width='7' height='28' rx='2' ry='2'></rect><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+}
+
+#next {
+  cursor: pointer;
+  position: absolute;
+  bottom: -20px;
+  right: 100px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: solid 5px #f7f7f7;
+  background-position: center;
+  background-size: 50%;
+  background-repeat: no-repeat;
+  align-self: center;
+  background-color: #17a348;
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' width='36' height='36' color='rgb(247, 247, 247)' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>step-forward-solid</title><path class='clr-i-solid clr-i-solid-path-1' d='M5,31.9a2,2,0,0,1-2-2V5.44A2,2,0,0,1,6.12,3.81L23.18,16a2,2,0,0,1,0,3.25h0L6.12,31.52A2,2,0,0,1,5,31.9Z'></path><rect class='clr-i-solid clr-i-solid-path-2' x='25.95' y='3.67' width='7' height='28' rx='2' ry='2'></rect><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+}
+
+#artists {
+  margin-top: 15px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+#name {
+  margin-top: 5px;
+  font-weight: 400;
+  font-size: 18px;
 }
 
 .pageContainer {
   margin: 0px 100px 100px 100px;
   padding-top: 25px;
   padding-bottom: 25px;
-  border-radius: 75px;
-  background-color: #f7f7f7;
 }
 
 #playlists {
@@ -88,7 +179,7 @@ body {
 }
 
 .name {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 300;
 }
 
