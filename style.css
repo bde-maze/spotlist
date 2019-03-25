@@ -1,0 +1,68 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Assistant', sans-serif;
+  background-color: #c9e3ac;
+}
+
+.pageContainer {
+  margin: 100px;
+  padding: 50px;
+  background-color: white;
+}
+
+.title {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 40px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#playlists {
+  margin-top: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.playlist {
+  height: 175px;
+  width: 350px;
+  display: flex;
+  margin-bottom: 50px;
+  background-color: white;
+  box-shadow: 7px 7px 10px #d7d7d766;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.cover {
+  width: 175px;
+  height: 100%;
+}
+
+.info {
+  text-align: center;
+  width: 175px;
+  padding: 10px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.nbTracks {
+  font-size: 25px;
+}
+
+.cover-container {
+  width: 175px;
+  height: 100%;
+  background-size: 25%;
+  background-position: center;
+  background-image: url("data:image/svg+xml;utf8,<svg width='80' height='81' color='rgb(95, 230, 216)' viewBox='0 0 80 81' xmlns='http://www.w3.org/2000/svg'> <title>Playlist Icon</title> <path paint-order='stroke' stroke='rgb(255, 115, 234)' stroke-width='10' d='M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z' fill='currentColor' fill-rule='evenodd' /></svg>");
+  text-shadow: #ff73ea;
+}

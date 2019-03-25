@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@now/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@now/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@now/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@now/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "CLIENT_ID": "4f8480235baf45c4974e35137a331e38",
+    "CLIENT_SECRET": "7a4dc675269e414194e956a9adfbec5d"
+  }
+}
