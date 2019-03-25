@@ -10,7 +10,7 @@ const userURL = 'https://api.spotify.com/v1/me'
 const contentTypeUrl = 'application/x-www-form-urlencoded'
 const contentTypeJson = 'application/json'
 
-const getAccessToken = async (body, redirect_uri, res) => {
+const getAccessToken = async (body, redirectUri, res) => {
   const tokenResponse = await spotify(
     'POST',
     `${accountURL}/api/token`,
@@ -24,20 +24,21 @@ const getAccessToken = async (body, redirect_uri, res) => {
     tokenResponse
   })
 
-  const access_token = tokenResponse.access_token
-  const refresh_token = tokenResponse.refresh_token
+  const accessToken = tokenResponse.access_token
+  const refreshToken = tokenResponse.refresh_token
+  const expiresIn = tokenResponse.expires_in
 
   const userResponse = await spotify('GET', userURL, contentTypeJson, {
-    token: `Bearer ${access_token}`
+    token: `Bearer ${accessToken}`
   }).catch(console.error)
-  const display_name = userResponse.display_name
+  const displayName = userResponse.display_name
   const avatarUrl = userResponse.images
     ? userResponse.images[0].url
-    : `https://joeschmoe.io/api/v1/${display_name}` // Thx for https://joeschmoe.io/
+    : `https://joeschmoe.io/api/v1/${displayName}` // Thx for https://joeschmoe.io/
   console.log(userResponse)
 
   await res.writeHead(302, {
-    Location: `${redirect_uri}?access_token=${access_token}&refresh_token=${refresh_token}&display_name=${display_name}&avatarUrl=${avatarUrl}`
+    Location: `${redirectUri}?access_token=${accessToken}&refresh_token=${refreshToken}&expires_in=${expiresIn}&set_at=${Date.now()}&display_name=${displayName}&avatar_url=${avatarUrl}`
   })
   res.end('OK')
 }
@@ -47,26 +48,30 @@ module.exports = async (req, res) => {
 
   const parsedUrl = new URL(`http://placeholder${req.url}`)
   const code = parsedUrl.searchParams.get('code')
-  const refresh_token = parsedUrl.searchParams.get('refresh_token')
-  const redirect_uri = parsedUrl.searchParams.get('redirect_uri')
+  const refreshToken = parsedUrl.searchParams.get('refresh_token')
+  const redirectUri = parsedUrl.searchParams.get('redirect_uri')
 
   if (code) {
     console.log({ code })
 
     await getAccessToken(
-      { code: code, redirect_uri, grant_type: 'authorization_code' },
-      redirect_uri,
+      {
+        code: code,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      },
+      redirectUri,
       res
     )
-  } else if (refresh_token) {
-    console.log({ refresh_token })
+  } else if (refreshToken) {
+    console.log({ refreshToken })
 
     await getAccessToken(
       {
-        refresh_token: refresh_token,
+        refresh_token: refreshToken,
         grant_type: 'refresh_token'
       },
-      redirect_uri,
+      redirectUri,
       res
     )
   }

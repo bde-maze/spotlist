@@ -15,25 +15,32 @@ const player = {
     spotify('POST', `${playerURL}/previous`, contentTypeUrl, { token })
 }
 
+const setDelay = delay =>
+  new Promise(success => {
+    setTimeout(success, delay)
+  })
+
 module.exports = async (req, res) => {
   console.log('=== PLAYER ===')
 
   const parsedUrl = new URL(`http://placeholder${req.url}`)
-  const access_token = parsedUrl.searchParams.get('access_token')
+  const accessToken = parsedUrl.searchParams.get('access_token')
   const action = parsedUrl.searchParams.get('action')
   res.setHeader('Content-Type', 'application/json')
   try {
-    if (access_token) {
-      console.log({ access_token })
+    if (accessToken) {
+      console.log({ accessToken })
 
       if (action) {
         console.log({ action })
-        await player[action](`Bearer ${access_token}`)
+        await player[action](`Bearer ${accessToken}`)
+        await setDelay(250)
       }
 
       const response = await spotify('GET', playerURL, contentTypeJson, {
-        token: `Bearer ${access_token}`
+        token: `Bearer ${accessToken}`
       })
+      console.log({ response })
 
       res.end(JSON.stringify(response))
     }

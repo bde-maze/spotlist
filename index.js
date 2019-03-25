@@ -1,10 +1,11 @@
 console.log('index.js')
+console.log(Number(localStorage.setAt), Number(localStorage.expiresIn) * 1000)
 
 const displayUserInformations = () => {
-  console.log(localStorage.display_name, localStorage.avatarUrl)
+  console.log(localStorage.displayName, localStorage.avatarUrl)
 
   // const displayNameElement = document.getElementById('display-name')
-  // displayNameElement.textContent = localStorage.display_name
+  // displayNameElement.textContent = localStorage.displayName
 
   const avatar = document.getElementById('avatar')
   avatar.style.backgroundImage = `url(${localStorage.avatarUrl})`
@@ -22,6 +23,12 @@ const displayPlayerInformations = playerInformations => {
 
   const nameBlock = document.getElementById('name')
   nameBlock.textContent = playerInformations.item.name
+
+  const trackCoverUrl = playerInformations.item.album.images[0]
+    ? playerInformations.item.album.images[0].url
+    : ''
+  const trackCover = document.getElementById('track-cover')
+  trackCover.src = trackCoverUrl
 
   const playPauseIcon = document.getElementById('play-pause')
   if (playerInformations.is_playing) {
@@ -129,27 +136,34 @@ const displayPlaylist = playlists => {
 const token = localStorage.token
 const { searchParams, origin } = new URL(window.location)
 const redirect_uri = origin
+const callAuth = url => {
+  fetch(url)
+    .then(response => {
+      const url = new URL(response.url)
+      const accessToken = url.searchParams.get('access_token')
+      const refreshToken = url.searchParams.get('refresh_token')
+      const setAt = url.searchParams.get('set_at')
+      const expiresIn = url.searchParams.get('expires_in')
+      const displayName = url.searchParams.get('display_name')
+      const avatarUrl = url.searchParams.get('avatar_url')
+      accessToken && (localStorage.token = accessToken)
+      refreshToken && (localStorage.refreshToken = refreshToken)
+      expiresIn && (localStorage.expiresIn = expiresIn)
+      avatarUrl && (localStorage.avatarUrl = avatarUrl)
+      displayName && (localStorage.displayName = displayName)
+      localStorage.setAt = setAt
+      window.location = '/'
+    })
+    .catch(console.error)
+}
 
 if (searchParams.get('code')) {
   // We have a code, so we call our API to get a Token
   console.log('Fetch token')
 
   if (localStorage.state === searchParams.get('state')) {
-    fetch(
-      `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
-    ).then(response => {
-      const url = new URL(response.url)
-      const access_token = url.searchParams.get('access_token')
-      const refresh_token = url.searchParams.get('refresh_token')
-      const display_name = url.searchParams.get('display_name')
-      const avatarUrl = url.searchParams.get('avatarUrl')
-      access_token && (localStorage.token = access_token)
-      refresh_token && (localStorage.refresh_token = refresh_token)
-      avatarUrl && (localStorage.avatarUrl = avatarUrl)
-      display_name && (localStorage.display_name = display_name)
-      localStorage.setAt = Date.now()
-      window.location = '/'
-    })
+    const url = `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
+    callAuth(url)
   }
 } else if (!token) {
   // No token we fetch spotify to get a code
@@ -171,26 +185,17 @@ if (searchParams.get('code')) {
     scope: scopes
   })}`
   window.location = url
-} else if (Number(localStorage.setAt) + 3600000 <= Date.now()) {
+} else if (
+  Number(localStorage.setAt) + Number(localStorage.expiresIn) * 1000 <=
+  Date.now()
+) {
   // Our Token expired, we ask a new one
   console.log('Token expired')
 
-  fetch(
-    `/api/spotify?refresh_token=${
-      localStorage.refresh_token
-    }&redirect_uri=${redirect_uri}`
-  )
-    .then(response => {
-      const url = new URL(response.url)
-      const access_token = url.searchParams.get('access_token')
-      const refresh_token = url.searchParams.get('refresh_token')
-      access_token && (localStorage.token = access_token)
-      refresh_token && (localStorage.refresh_token = refresh_token)
-      localStorage.setAt = Date.now()
-      console.log(localStorage.setAt)
-      window.location = '/'
-    })
-    .catch(console.error)
+  const url = `/api/spotify/auth?refresh_token=${
+    localStorage.refreshToken
+  }&redirect_uri=${redirect_uri}`
+  callAuth(url)
 } else {
   // We Fetch the playlists
   console.log('Fetch playlists')

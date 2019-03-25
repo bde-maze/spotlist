@@ -14,19 +14,27 @@
   <body>
     <div class="header">
       <div class="left">
-        <div class="title">Spotlist</div>
+        <h1 class="title">Spotlist</h1>
+        <div class="link active">Playlists</div>
+        <div class="link">Discover</div>
+        <div class="link">Stats</div>
       </div>
       <div class="right">
         <div id="player">
           <div id="avatar"></div>
+          <div id="device"></div>
           <div id="track-informations">
-            <div id="device"></div>
-            <div id="artists"></div>
-            <div id="name"></div>
-            <div id="prev"></div>
-            <div class="paused" id="play-pause"></div>
-            <div id="next"></div>
+            <div>
+              <div id="artists"></div>
+              <div id="name"></div>
+            </div>
+            <div id="track-cover-container">
+              <img id="track-cover" />
+            </div>
           </div>
+          <div id="prev"></div>
+          <div class="paused" id="play-pause"></div>
+          <div id="next"></div>
         </div>
       </div>
     </div>
