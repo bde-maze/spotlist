@@ -68,8 +68,12 @@ if (searchParams.get('code')) {
       const url = new URL(response.url)
       const access_token = url.searchParams.get('access_token')
       const refresh_token = url.searchParams.get('refresh_token')
+      const display_name = url.searchParams.get('display_name')
+      const avatarUrl = url.searchParams.get('avatarUrl')
       access_token && (localStorage.token = access_token)
       refresh_token && (localStorage.refresh_token = refresh_token)
+      avatarUrl && (localStorage.avatarUrl = avatarUrl)
+      display_name && (localStorage.display_name = display_name)
       localStorage.setAt = Date.now()
       window.location = '/'
     })
@@ -81,7 +85,7 @@ if (searchParams.get('code')) {
   const accountURL = 'https://accounts.spotify.com'
   const clientId = '4f8480235baf45c4974e35137a331e38'
   const scopes =
-    'playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
+    'user-read-email user-read-private playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
   const state = Math.random()
     .toString(36)
     .slice(2)

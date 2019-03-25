@@ -6,10 +6,12 @@ const clientSecret = process.env.CLIENT_SECRET
 const toBase64 = str => Buffer.from(str).toString('base64')
 const appToken = `Basic ${toBase64(`${clientId}:${clientSecret}`)}`
 const accountURL = 'https://accounts.spotify.com'
+const userURL = 'https://api.spotify.com/v1/me'
 const contentTypeUrl = 'application/x-www-form-urlencoded'
+const contentTypeJson = 'application/json'
 
 const getAccessToken = async (body, redirect_uri, res) => {
-  const response = await spotify(
+  const tokenResponse = await spotify(
     'POST',
     `${accountURL}/api/token`,
     contentTypeUrl,
@@ -18,17 +20,31 @@ const getAccessToken = async (body, redirect_uri, res) => {
       token: appToken
     }
   ).catch(error => console.dir(error))
-  console.log({ response })
-  const access_token = response.access_token
-  const refresh_token = response.refresh_token
-  res.writeHead(302, {
-    Location: `${redirect_uri}?access_token=${access_token}&refresh_token=${refresh_token}`
+  console.log({
+    tokenResponse
+  })
+
+  const access_token = tokenResponse.access_token
+  const refresh_token = tokenResponse.refresh_token
+
+  const userResponse = await spotify('GET', userURL, contentTypeJson, {
+    token: `Bearer ${access_token}`
+  }).catch(console.error)
+  const display_name = userResponse.display_name
+  const avatarUrl = userResponse.images
+    ? userResponse.images[0].url
+    : `https://joeschmoe.io/api/v1/${display_name}` // Thx for https://joeschmoe.io/
+  console.log(userResponse)
+
+  await res.writeHead(302, {
+    Location: `${redirect_uri}?access_token=${access_token}&refresh_token=${refresh_token}&display_name=${display_name}&avatarUrl=${avatarUrl}`
   })
   res.end('OK')
 }
 
 module.exports = async (req, res) => {
   console.log('=== AUTH ===')
+
   const parsedUrl = new URL(`http://placeholder${req.url}`)
   const code = parsedUrl.searchParams.get('code')
   const refresh_token = parsedUrl.searchParams.get('refresh_token')
