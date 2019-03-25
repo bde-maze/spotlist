@@ -42,7 +42,7 @@ const displayPlaylist = playlists => {
     nbTracksBlock.classList.add('nbTracks')
 
     nameBlock.textContent = name
-    nbTracksBlock.textContent = nbTracks
+    nbTracksBlock.textContent = `${nbTracks} songs`
     infoBlock.appendChild(nameBlock)
     infoBlock.appendChild(nbTracksBlock)
 
@@ -56,23 +56,28 @@ const displayPlaylist = playlists => {
 const token = localStorage.token
 const { searchParams, origin } = new URL(window.location)
 const redirect_uri = origin
+
 if (searchParams.get('code')) {
+  // We have a code, so we call our API to get a Token
   console.log('Fetch token')
+
   if (localStorage.state === searchParams.get('state')) {
-    fetch(`/api/spotify?${searchParams}&redirect_uri=${redirect_uri}`).then(
-      response => {
-        const url = new URL(response.url)
-        const access_token = url.searchParams.get('access_token')
-        const refresh_token = url.searchParams.get('refresh_token')
-        access_token && (localStorage.token = access_token)
-        refresh_token && (localStorage.refresh_token = refresh_token)
-        localStorage.setAt = Date.now()
-        window.location = '/'
-      }
-    )
+    fetch(
+      `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
+    ).then(response => {
+      const url = new URL(response.url)
+      const access_token = url.searchParams.get('access_token')
+      const refresh_token = url.searchParams.get('refresh_token')
+      access_token && (localStorage.token = access_token)
+      refresh_token && (localStorage.refresh_token = refresh_token)
+      localStorage.setAt = Date.now()
+      window.location = '/'
+    })
   }
 } else if (!token) {
+  // No token we fetch spotify to get a code
   console.log('No token')
+
   const accountURL = 'https://accounts.spotify.com'
   const clientId = '4f8480235baf45c4974e35137a331e38'
   const scopes =
@@ -90,7 +95,9 @@ if (searchParams.get('code')) {
   })}`
   window.location = url
 } else if (Number(localStorage.setAt) + 3600000 <= Date.now()) {
+  // Our Token expired, we ask a new one
   console.log('Token expired')
+
   fetch(
     `/api/spotify?refresh_token=${
       localStorage.refresh_token
@@ -108,8 +115,10 @@ if (searchParams.get('code')) {
     })
     .catch(console.error)
 } else {
+  // We Fetch the playlists
   console.log('Fetch playlists')
-  fetch(`/api/spotify?access_token=${token}`)
+
+  fetch(`/api/spotify/playlists?access_token=${token}`)
     .then(response => {
       return response.json()
     })

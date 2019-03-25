@@ -2,26 +2,29 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: #c9e3ac;
 }
 
 .pageContainer {
-  margin: 100px;
+  margin: 0px 100px 100px 100px;
   padding: 50px;
   background-color: white;
 }
 
 .title {
-  text-align: center;
+  margin-top: 75px;
+  margin-left: 50px;
+  margin-bottom: 75px;
+  text-align: left;
   text-transform: uppercase;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 35px;
+  font-weight: 300;
   letter-spacing: 1px;
 }
 
 #playlists {
-  margin-top: 100px;
+  margin-top: 50px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -50,12 +53,13 @@ body {
 }
 
 .name {
-  font-size: 18px;
+  font-size: 25px;
   font-weight: 300;
 }
 
 .nbTracks {
-  font-size: 25px;
+  font-size: 18px;
+  font-weight: 300;
 }
 
 .cover-container {

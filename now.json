@@ -24,7 +24,7 @@
       "dest": "/index.html"
     },
     {
-      "src": "/api/(.*)",
+      "src": "/api/spotify/(.*)",
       "dest": "/api/$1.js"
     },
     {
