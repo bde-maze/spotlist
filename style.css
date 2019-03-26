@@ -53,10 +53,20 @@ body {
   align-self: center;
 }
 
+#player {
+  padding: 20px;
+  position: relative;
+  background-color: #f7f7f7;
+  width: 350px;
+  height: 100px;
+  border-radius: 15px;
+  box-shadow: 7px 7px 10px #d7d7d766;
+}
+
 #avatar {
   position: absolute;
-  top: -20px;
-  right: -15px;
+  top: -30px;
+  right: -30px;
   width: 50px;
   height: 50px;
   border-radius: 50px;
@@ -68,26 +78,10 @@ body {
   background-color: #c9e3ac;
 }
 
-#player {
-  padding: 15px;
-  position: relative;
-  background-color: #f7f7f7;
-  width: 350px;
-  height: 150px;
-  border-radius: 15px;
-  box-shadow: 7px 7px 10px #d7d7d766;
-}
-
-#device {
-  font-size: 16px;
-  height: 20px;
-}
-
 #track-informations {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-top: 25px;
 }
 
 #artists {
@@ -102,23 +96,24 @@ body {
 }
 
 #track-cover-container {
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
+  border-radius: 25%;
   background-size: 25%;
   background-position: center;
   background-image: url("data:image/svg+xml;utf8,<svg width='80' height='81' color='rgb(95, 230, 216)' viewBox='0 0 80 81' xmlns='http://www.w3.org/2000/svg'> <title>Playlist Icon</title> <path paint-order='stroke' stroke='rgb(255, 115, 234)' stroke-width='10' d='M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z' fill='currentColor' fill-rule='evenodd' /></svg>");
-  text-shadow: #ff73ea;
 }
 
 #track-cover {
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
+  border-radius: 25%;
 }
 
 #play-pause {
   cursor: pointer;
   position: absolute;
-  bottom: -35px;
+  bottom: -45px;
   right: 150px;
   width: 60px;
   height: 60px;
@@ -143,7 +138,7 @@ body {
   cursor: pointer;
   position: absolute;
   bottom: -20px;
-  left: 110px;
+  left: 130px;
   width: 35px;
   height: 35px;
   border-radius: 50px;
@@ -161,7 +156,7 @@ body {
   cursor: pointer;
   position: absolute;
   bottom: -20px;
-  right: 100px;
+  right: 110px;
   width: 35px;
   height: 35px;
   border-radius: 50px;
@@ -172,6 +167,31 @@ body {
   align-self: center;
   background-color: #17a348;
   background-image: url("data:image/svg+xml;utf8,<svg version='1.1' width='36' height='36' color='rgb(247, 247, 247)' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>step-forward-solid</title><path class='clr-i-solid clr-i-solid-path-1' d='M5,31.9a2,2,0,0,1-2-2V5.44A2,2,0,0,1,6.12,3.81L23.18,16a2,2,0,0,1,0,3.25h0L6.12,31.52A2,2,0,0,1,5,31.9Z'></path><rect class='clr-i-solid clr-i-solid-path-2' x='25.95' y='3.67' width='7' height='28' rx='2' ry='2'></rect><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+}
+
+#library-state {
+  cursor: pointer;
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  border: solid 5px #f7f7f7;
+  background-position: center;
+  background-size: 65%;
+  background-repeat: no-repeat;
+  align-self: center;
+  background-color: #f7f7f7;
+}
+
+#library-state.saved {
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' stroke-width='3' width='36' height='36' color='rgb(247, 247, 247)' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>check-line</title><path class='clr-i-outline clr-i-outline-path-1' d='M13.72,27.69,3.29,17.27a1,1,0,0,1,1.41-1.41l9,9L31.29,7.29a1,1,0,0,1,1.41,1.41Z'></path><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+  background-color: #17a348;
+}
+
+#library-state.to-save {
+  background-image: url("data:image/svg+xml;utf8,<svg version='1.1' stroke-width='3' width='36' height='36' color='rgb(23, 163, 72)' fill='currentColor' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>plus-line</title><path class='clr-i-outline clr-i-outline-path-1' d='M30,17H19V6a1,1,0,1,0-2,0V17H6a1,1,0,0,0-1,1,.91.91,0,0,0,1,.94H17V30a1,1,0,1,0,2,0V19H30a1,1,0,0,0,1-1A1,1,0,0,0,30,17Z'></path><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
 }
 
 .pageContainer {

@@ -100,12 +100,65 @@ const transferDevice = deviceId => {
   ).catch(console.error)
 }
 
-const displayTrackInformations = trackInformations => {
+const checkUserSavedTrack = async trackId => {
+  return await fetch(
+    `/api/spotify/tracks?access_token=${
+      localStorage.token
+    }&action=contains&track_id=${trackId}`
+  )
+    .then(response => {
+      return response.json()
+    })
+    .catch(console.error)
+}
+
+const saveTrack = async trackId => {
+  return await fetch(
+    `/api/spotify/tracks?access_token=${
+      localStorage.token
+    }&action=save&track_id=${trackId}`
+  )
+    .then(response => {
+      return response.json()
+    })
+    .catch(console.error)
+}
+
+const unsaveTrack = async trackId => {
+  return await fetch(
+    `/api/spotify/tracks?access_token=${
+      localStorage.token
+    }&action=remove&track_id=${trackId}`
+  )
+    .then(response => {
+      return response.json()
+    })
+    .catch(console.error)
+}
+
+const displayTrackInformations = async trackInformations => {
   console.log({ trackInformations })
   const nameBlock = document.getElementById('name')
   if (trackInformations) {
-    // const deviceBlock = document.getElementById('device')
-    // deviceBlock.textContent = `Listening on ${trackInformations.device.name}`
+    const libraryStateBlock = document.getElementById('library-state')
+    const isSaved = await checkUserSavedTrack(trackInformations.id)
+    if (isSaved && isSaved[0]) {
+      libraryStateBlock.classList.remove('to-save')
+      libraryStateBlock.classList.add('saved')
+      libraryStateBlock.onclick = () => {
+        libraryStateBlock.classList.remove('saved')
+        libraryStateBlock.classList.add('to-save')
+        unsaveTrack(trackInformations.id)
+      }
+    } else {
+      libraryStateBlock.classList.remove('saved')
+      libraryStateBlock.classList.add('to-save')
+      libraryStateBlock.onclick = () => {
+        libraryStateBlock.classList.remove('to-save')
+        libraryStateBlock.classList.add('saved')
+        saveTrack(trackInformations.id)
+      }
+    }
 
     const artistsBlock = document.getElementById('artists')
     const artists = trackInformations.artists.map(artist => artist.name)
@@ -215,7 +268,7 @@ if (searchParams.get('code')) {
   const accountURL = 'https://accounts.spotify.com'
   const clientId = '4f8480235baf45c4974e35137a331e38'
   const scopes =
-    'streaming user-read-birthdate user-read-email user-read-private user-read-playback-state user-modify-playback-state playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
+    'user-library-read user-library-modify streaming user-read-birthdate user-read-email user-read-private user-read-playback-state user-modify-playback-state playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
   const state = Math.random()
     .toString(36)
     .slice(2)
