@@ -136,6 +136,27 @@ const unsaveTrack = async trackId => {
     .catch(console.error)
 }
 
+const playRandomTrack = () => {
+  console.log('Play random track')
+  fetch(
+    `/api/spotify/discover?access_token=${
+      localStorage.token
+    }&action=random_track`
+  )
+    .then(async response => {
+      const data = await response.json()
+      console.log({ data })
+      const trackUri = data.tracks && data.tracks[0].uri
+      fetch(
+        `/api/spotify/player?access_token=${
+          localStorage.token
+        }&action=play_with_uri&track_uri=${trackUri}`
+      ).catch(console.error)
+      return data
+    })
+    .catch(console.error)
+}
+
 const displayTrackInformations = async trackInformations => {
   console.log({ trackInformations })
   const nameBlock = document.getElementById('name')

@@ -24,22 +24,28 @@
           <div id="avatar"></div>
           <div id="track-informations">
             <div>
-              <div id="artists"></div>
               <div id="name"></div>
+              <div id="artists"></div>
             </div>
             <div id="track-cover-container">
               <img id="track-cover" />
             </div>
           </div>
-          <div id="prev"></div>
-          <div class="paused" id="play-pause"></div>
-          <div id="next"></div>
-          <div class="saved" id="library-state"></div>
+          <button id="prev"></button>
+          <button class="paused" id="play-pause"></button>
+          <button id="next"></button>
+          <button class="saved" id="library-state"></button>
         </div>
       </div>
     </div>
     <div class="pageContainer">
+      <div id="discovery">
+        <button onclick="playRandomTrack()" id="random-track-button">
+          Play random track
+        </button>
+      </div>
       <div id="playlists"></div>
+      <div id="stats"></div>
     </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="index.js"></script>
