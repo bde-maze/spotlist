@@ -20,8 +20,10 @@ const getBody = stream =>
 
 module.exports = (method, url, contentType, { token, body }) =>
   new Promise((resolve, reject) => {
+    const json = contentType === 'application/json'
     const headers = { Authorization: token, 'content-type': contentType }
     request({ ...parse(url), method, headers }, response => {
+      console.log('Spotify Response Code', response.statusCode)
       if (response.statusCode === 200) return resolve(getBody(response))
       if (response.statusCode === 204) return resolve(null)
 
@@ -41,5 +43,9 @@ module.exports = (method, url, contentType, { token, body }) =>
         .catch(reject)
     })
       .on('error', reject)
-      .end(body && new URLSearchParams(body).toString())
+      .end(
+        body && json
+          ? JSON.stringify(body)
+          : new URLSearchParams(body).toString()
+      )
   })

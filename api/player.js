@@ -6,13 +6,29 @@ const contentTypeJson = 'application/json'
 const contentTypeUrl = 'application/x-www-form-urlencoded'
 
 const player = {
+  transfer: (token, deviceId) =>
+    spotify('PUT', playerURL, contentTypeJson, {
+      token,
+      body: {
+        device_ids: [deviceId]
+      }
+    }),
   play: token => spotify('PUT', `${playerURL}/play`, contentTypeUrl, { token }),
+  play_with_device: (token, deviceId) =>
+    spotify('PUT', `${playerURL}/play`, contentTypeJson, {
+      token,
+      body: {
+        device_id: deviceId
+      }
+    }),
   pause: token =>
     spotify('PUT', `${playerURL}/pause`, contentTypeUrl, { token }),
   next: token =>
     spotify('POST', `${playerURL}/next`, contentTypeUrl, { token }),
   previous: token =>
-    spotify('POST', `${playerURL}/previous`, contentTypeUrl, { token })
+    spotify('POST', `${playerURL}/previous`, contentTypeUrl, { token }),
+  devices: token =>
+    spotify('GET', `${playerURL}/devices`, contentTypeUrl, { token })
 }
 
 const setDelay = delay =>
@@ -26,14 +42,17 @@ module.exports = async (req, res) => {
   const parsedUrl = new URL(`http://placeholder${req.url}`)
   const accessToken = parsedUrl.searchParams.get('access_token')
   const action = parsedUrl.searchParams.get('action')
+  const deviceId = parsedUrl.searchParams.get('device_id')
   res.setHeader('Content-Type', 'application/json')
   try {
     if (accessToken) {
       console.log({ accessToken })
+      console.log({ action })
 
       if (action) {
-        console.log({ action })
-        await player[action](`Bearer ${accessToken}`)
+        deviceId && (action === 'play_with_device' || action === 'transfer')
+          ? await player[action](`Bearer ${accessToken}`, deviceId)
+          : await player[action](`Bearer ${accessToken}`)
         await setDelay(250)
       }
 

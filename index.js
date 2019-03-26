@@ -11,72 +11,115 @@ const displayUserInformations = () => {
   avatar.style.backgroundImage = `url(${localStorage.avatarUrl})`
 }
 
-const displayPlayerInformations = playerInformations => {
-  console.log(playerInformations)
-
-  const deviceBlock = document.getElementById('device')
-  deviceBlock.textContent = `Listening on ${playerInformations.device.name}`
-
-  const artistsBlock = document.getElementById('artists')
-  const artists = playerInformations.item.artists.map(artist => artist.name)
-  artistsBlock.textContent = artists.join(', ')
-
-  const nameBlock = document.getElementById('name')
-  nameBlock.textContent = playerInformations.item.name
-
-  const trackCoverUrl = playerInformations.item.album.images[0]
-    ? playerInformations.item.album.images[0].url
-    : ''
-  const trackCover = document.getElementById('track-cover')
-  trackCover.src = trackCoverUrl
-
-  const playPauseIcon = document.getElementById('play-pause')
-  if (playerInformations.is_playing) {
-    playPauseIcon.classList.remove('paused')
-    playPauseIcon.classList.add('playing')
-    playPauseIcon.onclick = () => {
-      fetch(`/api/spotify/player?access_token=${token}&action=pause`)
-        .then(response => {
-          return response.json()
-        })
-        .then(playerInformations => {
-          displayPlayerInformations(playerInformations)
-        })
-        .catch(console.error)
+window.onSpotifyWebPlaybackSDKReady = () => {
+  const token = localStorage.token
+  const player = new Spotify.Player({
+    name: 'Spotlist Web Player',
+    getOAuthToken: callback => {
+      callback(token)
     }
-  } else {
+  })
+
+  // Error handling
+  player.addListener('initialization_error', ({ message }) => {
+    console.error(message)
+  })
+  player.addListener('authentication_error', ({ message }) => {
+    console.error(message)
+  })
+  player.addListener('account_error', ({ message }) => {
+    console.error(message)
+  })
+  player.addListener('playback_error', ({ message }) => {
+    console.error(message)
+  })
+
+  // Playback status updates
+  player.addListener('player_state_changed', state => {
+    console.log('player_state_changed', { state })
+    displayTrackInformations(state.track_window.current_track)
+    playerController(player, state)
+  })
+
+  // Ready
+  player.addListener('ready', res => {
+    console.log('Ready with Device ID', res.device_id)
+    transferDevice(res.device_id)
+    playerController(player)
+  })
+
+  // Not Ready
+  player.addListener('not_ready', ({ deviceId }) => {
+    console.log('Device ID has gone offline', deviceId)
+  })
+
+  // Connect to the player!
+  player.connect()
+}
+
+const playerController = async (player, state) => {
+  console.log('Player Controller')
+  const playPauseIcon = document.getElementById('play-pause')
+  state || (await player.getCurrentState())
+  console.log({ state })
+
+  if (!state) {
+    console.error('Nothing playing through Spotlist')
+    playPauseIcon.onclick = () => {
+      player.resume()
+    }
+    return
+  } else if (state.paused) {
+    console.log('Paused')
     playPauseIcon.classList.remove('playing')
     playPauseIcon.classList.add('paused')
     playPauseIcon.onclick = () => {
-      fetch(`/api/spotify/player?access_token=${token}&action=play`)
-        .then(response => {
-          return response.json()
-        })
-        .then(playerInformations => {
-          displayPlayerInformations(playerInformations)
-        })
-        .catch(console.error)
+      player.resume()
+    }
+  } else {
+    console.log('Playing')
+    playPauseIcon.classList.remove('paused')
+    playPauseIcon.classList.add('playing')
+    playPauseIcon.onclick = () => {
+      player.pause()
     }
   }
   document.getElementById('prev').onclick = () => {
-    fetch(`/api/spotify/player?access_token=${token}&action=previous`)
-      .then(response => {
-        return response.json()
-      })
-      .then(playerInformations => {
-        displayPlayerInformations(playerInformations)
-      })
-      .catch(console.error)
+    player.previousTrack()
   }
   document.getElementById('next').onclick = () => {
-    fetch(`/api/spotify/player?access_token=${token}&action=next`)
-      .then(response => {
-        return response.json()
-      })
-      .then(playerInformations => {
-        displayPlayerInformations(playerInformations)
-      })
-      .catch(console.error)
+    player.nextTrack()
+  }
+}
+
+const transferDevice = deviceId => {
+  fetch(
+    `/api/spotify/player?access_token=${
+      localStorage.token
+    }&action=transfer&device_id=${deviceId}`
+  ).catch(console.error)
+}
+
+const displayTrackInformations = trackInformations => {
+  console.log({ trackInformations })
+  const nameBlock = document.getElementById('name')
+  if (trackInformations) {
+    // const deviceBlock = document.getElementById('device')
+    // deviceBlock.textContent = `Listening on ${trackInformations.device.name}`
+
+    const artistsBlock = document.getElementById('artists')
+    const artists = trackInformations.artists.map(artist => artist.name)
+    artistsBlock.textContent = artists.join(', ')
+
+    nameBlock.textContent = trackInformations.name
+
+    const trackCoverUrl = trackInformations.album.images[0]
+      ? trackInformations.album.images[0].url
+      : ''
+    const trackCover = document.getElementById('track-cover')
+    trackCover.src = trackCoverUrl
+  } else {
+    nameBlock.textContent = 'Nothing playing'
   }
 }
 
@@ -172,7 +215,7 @@ if (searchParams.get('code')) {
   const accountURL = 'https://accounts.spotify.com'
   const clientId = '4f8480235baf45c4974e35137a331e38'
   const scopes =
-    'user-read-email user-read-private user-read-playback-state user-modify-playback-state playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
+    'streaming user-read-birthdate user-read-email user-read-private user-read-playback-state user-modify-playback-state playlist-read-private playlist-modify-public playlist-modify-private playlist-read-collaborative'
   const state = Math.random()
     .toString(36)
     .slice(2)
@@ -202,21 +245,14 @@ if (searchParams.get('code')) {
 
   displayUserInformations()
 
-  fetch(`/api/spotify/player?access_token=${token}`)
-    .then(response => {
-      return response.json()
-    })
-    .then(playerInformations => {
-      displayPlayerInformations(playerInformations)
-    })
-    .catch(console.error)
-
   fetch(`/api/spotify/playlists?access_token=${token}`)
     .then(response => {
       return response.json()
     })
-    .then(playlists =>
-      displayPlaylist(addNbTracks(playlists.flat(), 'nbTracks').sort(compare))
+    .then(
+      playlists =>
+        playlists &&
+        displayPlaylist(addNbTracks(playlists.flat(), 'nbTracks').sort(compare))
     )
     .catch(console.error)
 }
