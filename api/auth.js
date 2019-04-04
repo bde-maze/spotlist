@@ -1,4 +1,4 @@
-const { URL } = require('url')
+const { URL, URLSearchParams } = require('url')
 const spotify = require('./spotify.js')
 
 const clientId = process.env.CLIENT_ID
@@ -31,11 +31,14 @@ const getAccessToken = async (body, redirectUri, res) => {
   const userResponse = await spotify('GET', userURL, contentTypeJson, {
     token: `Bearer ${accessToken}`
   }).catch(console.error)
-  const displayName = userResponse.display_name
-  const avatarUrl = userResponse.images
-    ? userResponse.images[0].url
-    : `https://joeschmoe.io/api/v1/${displayName}` // Thx for https://joeschmoe.io/
   console.log(userResponse)
+  const displayName = userResponse.display_name
+  const avatarUrl =
+    userResponse.images && userResponse.images.length > 0
+      ? userResponse.images[0].url
+      : `https://joeschmoe.io/api/v1/${new URLSearchParams(
+          displayName
+        ).toString()}` // Thx for https://joeschmoe.io/
 
   await res.writeHead(302, {
     Location: `${redirectUri}?access_token=${accessToken}&refresh_token=${refreshToken}&expires_in=${expiresIn}&set_at=${Date.now()}&display_name=${displayName}&avatar_url=${avatarUrl}`

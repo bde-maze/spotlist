@@ -13,48 +13,50 @@ const displayUserInformations = () => {
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   const token = localStorage.token
-  const player = new Spotify.Player({
-    name: 'Spotlist Web Player',
-    getOAuthToken: callback => {
-      callback(token)
-    }
-  })
+  if (token) {
+    const player = new Spotify.Player({
+      name: 'Spotlist Web Player',
+      getOAuthToken: callback => {
+        callback(token)
+      }
+    })
 
-  // Error handling
-  player.addListener('initialization_error', ({ message }) => {
-    console.error(message)
-  })
-  player.addListener('authentication_error', ({ message }) => {
-    console.error(message)
-  })
-  player.addListener('account_error', ({ message }) => {
-    console.error(message)
-  })
-  player.addListener('playback_error', ({ message }) => {
-    console.error(message)
-  })
+    // Error handling
+    player.addListener('initialization_error', ({ message }) => {
+      console.error(message)
+    })
+    player.addListener('authentication_error', ({ message }) => {
+      console.error(message)
+    })
+    player.addListener('account_error', ({ message }) => {
+      console.error(message)
+    })
+    player.addListener('playback_error', ({ message }) => {
+      console.error(message)
+    })
 
-  // Playback status updates
-  player.addListener('player_state_changed', state => {
-    console.log('player_state_changed', { state })
-    displayTrackInformations(state.track_window.current_track)
-    playerController(player, state)
-  })
+    // Playback status updates
+    player.addListener('player_state_changed', state => {
+      console.log('player_state_changed', { state })
+      displayTrackInformations(state.track_window.current_track)
+      playerController(player, state)
+    })
 
-  // Ready
-  player.addListener('ready', res => {
-    console.log('Ready with Device ID', res.device_id)
-    transferDevice(res.device_id)
-    playerController(player)
-  })
+    // Ready
+    player.addListener('ready', res => {
+      console.log('Ready with Device ID', res.device_id)
+      transferDevice(res.device_id)
+      playerController(player)
+    })
 
-  // Not Ready
-  player.addListener('not_ready', ({ deviceId }) => {
-    console.log('Device ID has gone offline', deviceId)
-  })
+    // Not Ready
+    player.addListener('not_ready', ({ deviceId }) => {
+      console.log('Device ID has gone offline', deviceId)
+    })
 
-  // Connect to the player!
-  player.connect()
+    // Connect to the player!
+    player.connect()
+  }
 }
 
 const playerController = async (player, state) => {
