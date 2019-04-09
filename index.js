@@ -285,7 +285,11 @@ if (searchParams.get('code')) {
     const url = `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
     callAuth(url)
   }
-} else if (!token || !localStorage.refreshToken) {
+} else if (
+  !token ||
+  !localStorage.refreshToken ||
+  localStorage.refreshToken === 'undefined'
+) {
   // No token we fetch spotify to get a code
   console.log('No token')
 
