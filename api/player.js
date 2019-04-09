@@ -15,11 +15,11 @@ const player = {
     }),
   play: token =>
     spotify('PUT', `${playerURL}/play`, contentTypeJson, { token }),
-  play_with_uri: (token, trackUri) =>
+  play_with_uri: (token, trackUris) =>
     spotify('PUT', `${playerURL}/play`, contentTypeJson, {
       token,
       body: {
-        uris: [trackUri]
+        uris: trackUris
       }
     }),
   play_with_device: (token, deviceId) =>
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
   const accessToken = parsedUrl.searchParams.get('access_token')
   const action = parsedUrl.searchParams.get('action')
   const deviceId = parsedUrl.searchParams.get('device_id')
-  const trackUri = parsedUrl.searchParams.get('track_uri')
+  const trackUris = parsedUrl.searchParams.get('track_uris')
   res.setHeader('Content-Type', 'application/json')
   try {
     if (accessToken) {
@@ -64,8 +64,8 @@ module.exports = async (req, res) => {
           (action === 'play_with_device' || action === 'transfer')
         )
           await player[action](`Bearer ${accessToken}`, deviceId)
-        else if (trackUri && action === 'play_with_uri') {
-          await player[action](`Bearer ${accessToken}`, trackUri)
+        else if (trackUris && action === 'play_with_uri') {
+          await player[action](`Bearer ${accessToken}`, trackUris.split(','))
         } else {
           await player[action](`Bearer ${accessToken}`)
         }

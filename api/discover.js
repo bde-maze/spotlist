@@ -16,11 +16,11 @@ const shuffle = array => {
   return array
 }
 
-const track = {
+const tracks = {
   random_track: (token, selectedGenres, targets) =>
     spotify(
       'GET',
-      `${discoverURL}?limit=1&seed_genres=${selectedGenres}&${targets}`,
+      `${discoverURL}?seed_genres=${selectedGenres}&${targets}`,
       contentTypeJson,
       {
         token
@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
       console.log({ action })
 
       if (action) {
-        const response = await track[action](
+        const response = await tracks[action](
           `Bearer ${accessToken}`,
           selectedGenres,
           targets

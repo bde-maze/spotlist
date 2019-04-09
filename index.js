@@ -148,11 +148,12 @@ const playRandomTrack = () => {
     .then(async response => {
       const data = await response.json()
       console.log({ data })
-      const trackUri = data.tracks && data.tracks[0].uri
+      const tracks = data.tracks && data.tracks
+      const uris = tracks.map(track => track.uri)
       fetch(
         `/api/spotify/player?access_token=${
           localStorage.token
-        }&action=play_with_uri&track_uri=${trackUri}`
+        }&action=play_with_uri&track_uris=${uris}`
       ).catch(console.error)
       return data
     })
