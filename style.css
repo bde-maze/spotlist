@@ -3,14 +3,14 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #c9e3ac;
+  background-color: #feea0c;
 }
 
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 75px;
+  padding: 75px;
   text-align: left;
 }
 
@@ -195,7 +195,6 @@ body {
 }
 
 .pageContainer {
-  margin: 0px 100px 100px 100px;
   padding-top: 25px;
   padding-bottom: 25px;
 }
