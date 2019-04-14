@@ -258,6 +258,7 @@ const displayPlaylist = playlists => {
 
   for (const playlist of playlists) {
     const name = playlist.name
+    const url = playlist.external_urls.spotify
     const cover = playlist.images[0] ? playlist.images[0].url : ''
     const nbTracks = playlist.nbTracks
 
@@ -274,13 +275,15 @@ const displayPlaylist = playlists => {
     const infoBlock = document.createElement('div')
     infoBlock.classList.add('info')
 
-    const nameBlock = document.createElement('p')
+    const nameBlock = document.createElement('a')
     nameBlock.classList.add('name')
 
     const nbTracksBlock = document.createElement('p')
     nbTracksBlock.classList.add('nbTracks')
 
     nameBlock.textContent = name
+    nameBlock.href = url
+    nameBlock.target = '_blank'
     nbTracksBlock.textContent = `${nbTracks} songs`
     infoBlock.appendChild(nameBlock)
     infoBlock.appendChild(nbTracksBlock)
