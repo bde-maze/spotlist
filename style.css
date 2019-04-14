@@ -23,7 +23,7 @@ body {
   height: 50px;
   padding-top: 25px;
   color: white;
-  font-size: 1.3em;
+  font-size: 1.1em;
   text-align: center;
   display: none;
   background-color: #ff591c9c;
@@ -34,7 +34,7 @@ body {
   padding: 25px;
   border-top: 5px solid white;
   color: white;
-  font-size: 1.3em;
+  font-size: 1.1em;
   text-align: center;
   display: none;
   background-color: #ff15f69c;
@@ -49,14 +49,14 @@ body {
 
 .title {
   text-transform: uppercase;
-  font-size: 2.5em;
+  font-size: 2.3em;
   font-weight: 200;
   letter-spacing: 1px;
   margin-top: 0;
 }
 
 .link {
-  font-size: 1.3em;
+  font-size: 1.1em;
   margin-bottom: 5px;
   font-weight: 300;
   cursor: pointer;
@@ -73,7 +73,7 @@ body {
 }
 
 .subtitle {
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-weight: 300;
   margin-right: 15px;
   align-self: center;
@@ -111,14 +111,21 @@ body {
 }
 
 #artists {
-  font-weight: 400;
-  font-size: 1.2em;
   margin-top: 5px;
+}
+
+#artists > a {
+  font-weight: 400;
+  font-size: 1em;
+  text-decoration: none;
+  color: #505050;
 }
 
 #name {
   font-weight: 700;
-  font-size: 1.3em;
+  font-size: 1.1em;
+  text-decoration: none;
+  color: #505050;
 }
 
 #track-cover-container {
@@ -235,7 +242,7 @@ body {
   text-transform: uppercase;
   background-color: #17a348;
   color: #f7f7f7;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 50px;
@@ -275,12 +282,14 @@ body {
 }
 
 .name {
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-weight: 400;
+  text-decoration: none;
+  color: #505050;
 }
 
 .nbTracks {
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: 300;
 }
 

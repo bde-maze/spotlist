@@ -183,7 +183,7 @@ const playRandomTrack = () => {
 
 const displayTrackInformations = async trackInformations => {
   console.log({ trackInformations })
-  const nameBlock = document.getElementById('name')
+  const nameElem = document.getElementById('name')
   if (trackInformations) {
     const libraryStateBlock = document.getElementById('library-state')
     const isSaved = await checkUserSavedTrack(trackInformations.id)
@@ -206,10 +206,26 @@ const displayTrackInformations = async trackInformations => {
     }
 
     const artistsBlock = document.getElementById('artists')
-    const artists = trackInformations.artists.map(artist => artist.name)
-    artistsBlock.textContent = artists.join(', ')
+    const artists = trackInformations.artists.map(artist => {
+      const link = document.createElement('a')
+      link.textContent = artist.name
+      link.setAttribute('target', '_blank')
+      link.setAttribute(
+        'href',
+        `https://open.spotify.com/artist/${artist.uri.split(':')[2]}`
+      )
+      return link
+    })
+    artistsBlock.innerHTML = ''
+    for (const artistLink of artists) {
+      artistsBlock.appendChild(artistLink)
+    }
 
-    nameBlock.textContent = trackInformations.name
+    nameElem.textContent = trackInformations.name
+    nameElem.setAttribute(
+      'href',
+      `https://open.spotify.com/track/${trackInformations.uri.split(':')[2]}`
+    )
 
     const trackCoverUrl = trackInformations.album.images[0]
       ? trackInformations.album.images[0].url
@@ -217,7 +233,7 @@ const displayTrackInformations = async trackInformations => {
     const trackCover = document.getElementById('track-cover')
     trackCover.src = trackCoverUrl
   } else {
-    nameBlock.textContent = 'Nothing playing'
+    nameElem.textContent = 'Nothing playing'
   }
 }
 
