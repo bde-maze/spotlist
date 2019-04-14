@@ -206,9 +206,12 @@ const displayTrackInformations = async trackInformations => {
     }
 
     const artistsBlock = document.getElementById('artists')
-    const artists = trackInformations.artists.map(artist => {
+    const artists = trackInformations.artists.map((artist, index) => {
       const link = document.createElement('a')
-      link.textContent = artist.name
+      link.textContent =
+        index + 1 < trackInformations.artists.length
+          ? `${artist.name}, `
+          : artist.name
       link.setAttribute('target', '_blank')
       link.setAttribute(
         'href',
