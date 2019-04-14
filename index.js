@@ -1,6 +1,13 @@
 console.log('index.js')
 console.log(Number(localStorage.setAt), Number(localStorage.expiresIn) * 1000)
 
+const isMobileDevice = () => {
+  return (
+    typeof window.orientation !== 'undefined' ||
+    navigator.userAgent.indexOf('IEMobile') !== -1
+  )
+}
+
 const displayUserInformations = () => {
   console.log(localStorage.displayName, localStorage.avatarUrl)
 
@@ -12,6 +19,9 @@ const displayUserInformations = () => {
 
   if (localStorage.plan !== 'premium') {
     document.getElementById('premium-banner').style.display = 'block'
+  }
+  if (isMobileDevice()) {
+    document.getElementById('mobile-banner').style.display = 'block'
   }
 }
 

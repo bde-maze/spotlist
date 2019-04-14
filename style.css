@@ -6,6 +6,10 @@ body {
   background-color: #feea0c;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -19,10 +23,21 @@ body {
   height: 50px;
   padding-top: 25px;
   color: white;
-  font-size: 18px;
+  font-size: 1.3em;
   text-align: center;
   display: none;
   background-color: #ff591c9c;
+}
+
+#mobile-banner {
+  width: 100%;
+  padding: 25px;
+  border-top: 5px solid white;
+  color: white;
+  font-size: 1.3em;
+  text-align: center;
+  display: none;
+  background-color: #ff15f69c;
 }
 
 .right,
@@ -34,14 +49,14 @@ body {
 
 .title {
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 2.5em;
   font-weight: 200;
   letter-spacing: 1px;
   margin-top: 0;
 }
 
 .link {
-  font-size: 20px;
+  font-size: 1.3em;
   margin-bottom: 5px;
   font-weight: 300;
   cursor: pointer;
@@ -58,7 +73,7 @@ body {
 }
 
 .subtitle {
-  font-size: 18px;
+  font-size: 1.3em;
   font-weight: 300;
   margin-right: 15px;
   align-self: center;
@@ -68,8 +83,8 @@ body {
   padding: 20px;
   position: relative;
   background-color: #f7f7f7;
-  width: 350px;
-  height: 100px;
+  width: 390px;
+  height: 140px;
   border-radius: 15px;
   box-shadow: 7px 7px 10px #d7d7d766;
 }
@@ -78,8 +93,8 @@ body {
   position: absolute;
   top: -30px;
   right: -30px;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50px;
   border: solid 5px #f7f7f7;
   background-position: center;
@@ -97,13 +112,13 @@ body {
 
 #artists {
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.2em;
   margin-top: 5px;
 }
 
 #name {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.3em;
 }
 
 #track-cover-container {
@@ -220,7 +235,7 @@ body {
   text-transform: uppercase;
   background-color: #17a348;
   color: #f7f7f7;
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 50px;
@@ -260,12 +275,12 @@ body {
 }
 
 .name {
-  font-size: 22px;
-  font-weight: 300;
+  font-size: 1.3em;
+  font-weight: 400;
 }
 
 .nbTracks {
-  font-size: 18px;
+  font-size: 1.1em;
   font-weight: 300;
 }
 
