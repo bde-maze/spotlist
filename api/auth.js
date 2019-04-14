@@ -33,6 +33,7 @@ const getAccessToken = async (body, redirectUri, res) => {
   }).catch(console.error)
   console.log(userResponse)
   const displayName = userResponse.display_name
+  const plan = userResponse.product
   const avatarUrl =
     userResponse.images && userResponse.images.length > 0
       ? userResponse.images[0].url
@@ -41,7 +42,7 @@ const getAccessToken = async (body, redirectUri, res) => {
         ).toString()}` // Thx for https://joeschmoe.io/
 
   await res.writeHead(302, {
-    Location: `${redirectUri}?access_token=${accessToken}&refresh_token=${refreshToken}&expires_in=${expiresIn}&set_at=${Date.now()}&display_name=${displayName}&avatar_url=${avatarUrl}`
+    Location: `${redirectUri}?access_token=${accessToken}&refresh_token=${refreshToken}&expires_in=${expiresIn}&set_at=${Date.now()}&display_name=${displayName}&avatar_url=${avatarUrl}&plan=${plan}`
   })
   res.end('OK')
 }

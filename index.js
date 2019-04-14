@@ -9,6 +9,10 @@ const displayUserInformations = () => {
 
   const avatar = document.getElementById('avatar')
   avatar.style.backgroundImage = `url(${localStorage.avatarUrl})`
+
+  if (localStorage.plan !== 'premium') {
+    document.getElementById('premium-banner').style.display = 'block'
+  }
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
@@ -37,6 +41,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
     // Playback status updates
     player.addListener('player_state_changed', state => {
+      if (
+        Number(localStorage.setAt) + Number(localStorage.expiresIn) * 1000 <=
+        Date.now()
+      ) {
+        // Our Token expired, we ask a new one
+        refreshToken()
+      }
       console.log('player_state_changed', { state })
       displayTrackInformations(state.track_window.current_track)
       playerController(player, state)
@@ -66,7 +77,7 @@ const playerController = async (player, state) => {
   console.log({ state })
 
   if (!state) {
-    console.error('Nothing playing through Spotlist')
+    console.warn('Nothing playing through Spotlist')
     playPauseIcon.onclick = () => {
       player.resume()
     }
@@ -213,11 +224,10 @@ const addNbTracks = playlists =>
   })
 
 const displayPlaylist = playlists => {
-  console.log(playlists)
+  console.dir(playlists)
   const playlistContainer = document.getElementById('playlists')
 
   for (const playlist of playlists) {
-    console.log(playlist)
     const name = playlist.name
     const cover = playlist.images[0] ? playlist.images[0].url : ''
     const nbTracks = playlist.nbTracks
@@ -265,32 +275,21 @@ const callAuth = url => {
       const setAt = url.searchParams.get('set_at')
       const expiresIn = url.searchParams.get('expires_in')
       const displayName = url.searchParams.get('display_name')
+      const plan = url.searchParams.get('plan')
       const avatarUrl = url.searchParams.get('avatar_url')
       accessToken && (localStorage.token = accessToken)
       refreshToken && (localStorage.refreshToken = refreshToken)
       expiresIn && (localStorage.expiresIn = expiresIn)
       avatarUrl && (localStorage.avatarUrl = avatarUrl)
       displayName && (localStorage.displayName = displayName)
+      plan && (localStorage.plan = plan)
       localStorage.setAt = setAt
       window.location = '/'
     })
     .catch(console.error)
 }
 
-if (searchParams.get('code')) {
-  // We have a code, so we call our API to get a Token
-  console.log('Fetch token')
-
-  if (localStorage.state === searchParams.get('state')) {
-    const url = `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
-    callAuth(url)
-  }
-} else if (
-  !token ||
-  !localStorage.refreshToken ||
-  localStorage.refreshToken === 'undefined'
-) {
-  // No token we fetch spotify to get a code
+const fetchSpotifyCode = () => {
   console.log('No token')
 
   const accountURL = 'https://accounts.spotify.com'
@@ -309,19 +308,27 @@ if (searchParams.get('code')) {
     scope: scopes
   })}`
   window.location = url
-} else if (
-  Number(localStorage.setAt) + Number(localStorage.expiresIn) * 1000 <=
-  Date.now()
-) {
-  // Our Token expired, we ask a new one
+}
+
+const fetchToken = () => {
+  console.log('Fetch token')
+
+  if (localStorage.state === searchParams.get('state')) {
+    const url = `/api/spotify/auth?${searchParams}&redirect_uri=${redirect_uri}`
+    callAuth(url)
+  }
+}
+
+const refreshToken = () => {
   console.log('Token expired')
 
   const url = `/api/spotify/auth?refresh_token=${
     localStorage.refreshToken
   }&redirect_uri=${redirect_uri}`
   callAuth(url)
-} else {
-  // We Fetch the playlists
+}
+
+const fetchPlaylists = () => {
   console.log('Fetch playlists')
 
   displayUserInformations()
@@ -336,4 +343,25 @@ if (searchParams.get('code')) {
         displayPlaylist(addNbTracks(playlists.flat(), 'nbTracks').sort(compare))
     )
     .catch(console.error)
+}
+
+if (searchParams.get('code')) {
+  // We have a code, so we call our API to get a Token
+  fetchToken()
+} else if (
+  !token ||
+  !localStorage.refreshToken ||
+  localStorage.refreshToken === 'undefined'
+) {
+  // No token we fetch spotify to get a code
+  fetchSpotifyCode()
+} else if (
+  Number(localStorage.setAt) + Number(localStorage.expiresIn) * 1000 <=
+  Date.now()
+) {
+  // Our Token expired, we ask a new one
+  refreshToken()
+} else {
+  // We Fetch the playlists
+  fetchPlaylists()
 }
