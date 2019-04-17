@@ -337,6 +337,7 @@ const callAuth = url => {
       displayName && (localStorage.displayName = displayName)
       plan && (localStorage.plan = plan)
       localStorage.setAt = setAt
+      localStorage.show_dialog = false
       window.location = '/'
     })
     .catch(console.error)
@@ -352,7 +353,7 @@ const fetchSpotifyCode = () => {
   const state = Math.random()
     .toString(36)
     .slice(2)
-  const showDialog = localStorage.show_dialog ? true : false
+  const showDialog = localStorage.show_dialog === true ? true : false
   localStorage.state = state
   const url = `${accountURL}/authorize?${new URLSearchParams({
     redirect_uri,
