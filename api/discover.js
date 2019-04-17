@@ -20,7 +20,7 @@ const tracks = {
   random_track: (token, selectedGenres, targets) =>
     spotify(
       'GET',
-      `${discoverURL}?limit=25&seed_genres=${selectedGenres}&${targets}`,
+      `${discoverURL}?limit=33&seed_genres=${selectedGenres}&${targets}`,
       contentTypeJson,
       {
         token
