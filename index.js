@@ -8,6 +8,13 @@ const isMobileDevice = () => {
   )
 }
 
+const logout = () => {
+  console.log('logout -> clear Local Storage')
+  localStorage.clear()
+  localStorage.show_dialog = true
+  document.location.reload(true)
+}
+
 const displayUserInformations = () => {
   console.log(localStorage.displayName, localStorage.avatarUrl)
 
@@ -16,6 +23,20 @@ const displayUserInformations = () => {
 
   const avatar = document.getElementById('avatar')
   avatar.style.backgroundImage = `url(${localStorage.avatarUrl})`
+  const logoutElem = document.getElementById('logout')
+
+  const showLogout = () => {
+    logoutElem.style.zIndex = 10
+  }
+  const hideLogout = () => {
+    logoutElem.style.zIndex = 1
+  }
+
+  logoutElem.onclick = () => logout()
+
+  const userCircle = document.getElementById('user-circle')
+  userCircle.addEventListener('mouseover', showLogout)
+  userCircle.addEventListener('mouseout', hideLogout)
 
   if (localStorage.plan !== 'premium') {
     document.getElementById('premium-banner').style.display = 'block'
@@ -331,13 +352,15 @@ const fetchSpotifyCode = () => {
   const state = Math.random()
     .toString(36)
     .slice(2)
+  const showDialog = localStorage.show_dialog ? true : false
   localStorage.state = state
   const url = `${accountURL}/authorize?${new URLSearchParams({
     redirect_uri,
     state: state,
     client_id: clientId,
     response_type: 'code',
-    scope: scopes
+    scope: scopes,
+    show_dialog: showDialog
   })}`
   window.location = url
 }

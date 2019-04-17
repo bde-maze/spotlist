@@ -102,6 +102,28 @@ body {
   background-repeat: no-repeat;
   align-self: center;
   background-color: #c9e3ac;
+  z-index: 5;
+}
+
+#logout {
+  cursor: pointer;
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  border: solid 5px #f7f7f7;
+  align-self: center;
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-image: url("data:image/svg+xml;utf8, <svg version='1.1' width='36' height='36' viewBox='0 0 36 36' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>power-line</title><path class='clr-i-outline clr-i-outline-path-1' d='M18,21a1,1,0,0,1-1-1V4a1,1,0,0,1,2,0V20A1,1,0,0,1,18,21Z'></path><path class='clr-i-outline clr-i-outline-path-2' d='M18,34.15a15,15,0,0,1-7.52-28,1,1,0,0,1,1,1.73,13,13,0,1,0,13,0,1,1,0,1,1,1-1.73,15,15,0,0,1-7.52,28Z'></path><rect x='0' y='0' width='36' height='36' fill-opacity='0'/></svg>");
+  z-index: 1;
+}
+#logout.show {
+  z-index: 10;
 }
 
 #track-informations {
